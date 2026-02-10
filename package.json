@@ -1,0 +1,32 @@
+{
+  "name": "lobster-browser-tool",
+  "version": "1.0.0",
+  "description": "零配置浏览器控制工具，简单且强大",
+  "main": "browser-control.js",
+  "bin": {
+    "lobster-browser-tool": "./browser-control.js"
+  },
+  "keywords": [
+    "browser",
+    "automation",
+    "playwright",
+    "chromium",
+    "cli",
+    "stealth"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openclaw/lobster-browser-tool.git"
+  },
+  "author": "OpenClaw",
+  "license": "MIT",
+  "scripts": {
+    "start": "node browser-control.js start",
+    "stop": "node browser-control.js stop",
+    "screenshot": "node browser-control.js screenshot",
+    "install": "npm install && npx playwright install chromium"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}

@@ -13,26 +13,13 @@
 ## 安装
 
 ```bash
-git clone https://github.com/openclaw/lobster-browser-tool.git
-cd lobster-browser-tool
-```
-
-## 依赖
-
-```bash
-# 安装 Playwright
-pip install playwright
-npx playwright install chromium
-
-# 安装 xvfb (用于无头模式)
-dnf install xvfb  # OpenCloudOS 9
-# apt install xvfb  # Ubuntu/Debian
+npm install -g lobster-browser-tool
 ```
 
 ## 使用
 
 ```bash
-xvfb-run --auto-servernum node browser-control.js <命令>
+lobster-browser-tool <命令>
 ```
 
 ### 命令列表
@@ -51,16 +38,24 @@ xvfb-run --auto-servernum node browser-control.js <命令>
 
 ```bash
 # 启动浏览器
-xvfb-run --auto-servernum node browser-control.js start
+lobster-browser-tool start
 
 # 访问 Google
-xvfb-run --auto-servernum node browser-control.js navigate https://google.com
+lobster-browser-tool navigate https://google.com
 
 # 截图
-xvfb-run --auto-servernum node browser-control.js screenshot
+lobster-browser-tool screenshot
 
 # AI 分析页面
-xvfb-run --auto-servernum node browser-control.js analyze "这个页面是关于什么的？"
+lobster-browser-tool analyze "这个页面是关于什么的？"
+```
+
+## 依赖
+
+首次安装会自动安装 Playwright。如果需要手动安装：
+
+```bash
+npx playwright install chromium
 ```
 
 ## 架构
