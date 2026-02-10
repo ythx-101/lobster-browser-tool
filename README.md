@@ -16,6 +16,22 @@
 npm install -g lobster-browser-tool
 ```
 
+### Setup 说明
+
+安装后会自动执行 `postinstall` 脚本来安装 Playwright Chromium 内核：
+
+```bash
+# 自动安装（推荐）
+npm install -g lobster-browser-tool
+
+# 或手动运行 setup
+npx lobster-browser-tool setup
+# 或
+npm run setup
+```
+
+> **注意**：首次安装时，`postinstall` 会自动调用 `npx playwright install chromium`，确保浏览器内核可用。
+
 ## 使用
 
 ```bash

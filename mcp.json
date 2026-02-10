@@ -1,0 +1,32 @@
+{
+  "name": "lobster-browser-tool",
+  "version": "1.0.0",
+  "commands": [
+    {
+      "name": "start",
+      "description": "启动浏览器"
+    },
+    {
+      "name": "stop",
+      "description": "关闭浏览器"
+    },
+    {
+      "name": "navigate",
+      "description": "访问页面",
+      "parameters": {
+        "url": {"type": "string", "description": "目标 URL"}
+      }
+    },
+    {
+      "name": "screenshot",
+      "description": "截图"
+    },
+    {
+      "name": "analyze",
+      "description": "AI 分析页面",
+      "parameters": {
+        "prompt": {"type": "string", "description": "分析提示词"}
+      }
+    }
+  ]
+}
