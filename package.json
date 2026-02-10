@@ -24,11 +24,12 @@
     "start": "node browser-control.js start",
     "stop": "node browser-control.js stop",
     "screenshot": "node browser-control.js screenshot",
-    "install": "npm install && npx playwright install chromium",
+    "install": "npx playwright install chromium",
     "postinstall": "npx playwright install chromium",
     "setup": "npx playwright install chromium"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.2.0",
     "playwright": "^1.40.0"
   }
 }

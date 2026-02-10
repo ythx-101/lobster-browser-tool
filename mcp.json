@@ -1,32 +1,128 @@
 {
   "name": "lobster-browser-tool",
   "version": "1.0.0",
+  "description": "Zero-config browser control tool with stealth anti-detection",
   "commands": [
     {
       "name": "start",
-      "description": "启动浏览器"
+      "description": "启动浏览器（启动后会自动应用反检测 stealth 补丁）",
+      "examples": ["lobster-browser-tool start"]
     },
     {
       "name": "stop",
-      "description": "关闭浏览器"
+      "description": "关闭浏览器（任务结束后请务必调用此命令释放资源）",
+      "examples": ["lobster-browser-tool stop"]
     },
     {
       "name": "navigate",
-      "description": "访问页面",
+      "description": "导航到指定 URL（会自动等待页面加载完成）",
       "parameters": {
-        "url": {"type": "string", "description": "目标 URL"}
-      }
+        "url": {
+          "type": "string",
+          "description": "目标 URL，必须以 http:// 或 https:// 开头",
+          "required": true,
+          "examples": ["https://google.com", "https://example.com/page"]
+        }
+      },
+      "examples": ["lobster-browser-tool navigate https://google.com"]
     },
     {
       "name": "screenshot",
-      "description": "截图"
+      "description": "对当前页面进行截图（返回截图文件路径）",
+      "parameters": {
+        "outputPath": {
+          "type": "string",
+          "description": "截图保存路径（可选，默认 /tmp/screenshot.png）",
+          "required": false,
+          "default": "/tmp/screenshot.png"
+        }
+      },
+      "examples": ["lobster-browser-tool screenshot", "lobster-browser-tool screenshot /tmp/my-screenshot.png"]
     },
     {
       "name": "analyze",
-      "description": "AI 分析页面",
+      "description": "使用 AI（Gemini Vision）对页面截图进行分析（需要 GEMINI_API_KEY 环境变量）",
       "parameters": {
-        "prompt": {"type": "string", "description": "分析提示词"}
-      }
+        "prompt": {
+          "type": "string",
+          "description": "分析提示词，描述你想从页面了解什么",
+          "required": true,
+          "examples": ["页面主要内容是什么？", "提取所有价格信息", "描述这个图表展示的数据"]
+        }
+      },
+      "examples": ["lobster-browser-tool analyze \"页面主要内容是什么？\"", "lobster-browser-tool analyze \"提取所有价格信息\""]
+    },
+    {
+      "name": "snapshot",
+      "description": "获取当前页面结构快照（返回 URL、标题、文本内容和链接列表）",
+      "examples": ["lobster-browser-tool snapshot"]
+    },
+    {
+      "name": "status",
+      "description": "查看浏览器当前状态（返回运行状态、路径等信息）",
+      "examples": ["lobster-browser-tool status"]
+    },
+    {
+      "name": "wait_for_visible",
+      "description": "等待指定选择器的元素变为可见状态（重要：执行任何操作前请先等待元素可见）",
+      "parameters": {
+        "selector":": "string",
+          "description": {
+          "type "CSS 选择器或 XPath",
+          "required": true,
+          "examples": ["#submit-button", ".login-btn", "//input[@type='email']", "a[href='/submit']"]
+        },
+        "timeoutMs": {
+          "type": "number",
+          "description": "超时时间（毫秒，可选，默认 10000）",
+          "required": false,
+          "default": 10000
+        }
+      },
+      "examples": ["等待登录按钮可见", "等待 5 秒直到搜索框可见"]
+    },
+    {
+      "name": "click",
+      "description": "点击指定选择器的元素（重要：必须先调用 wait_for_visible 等待元素可见）",
+      "parameters": {
+        "selector": {
+          "type": "string",
+          "description": "CSS 选择器或 XPath",
+          "required": true,
+          "examples": ["#submit-button", ".login-btn", "//button[contains(text(),'确认')]"]
+        }
+      },
+      "examples": ["点击提交按钮"]
+    },
+    {
+      "name": "type",
+      "description": "在指定输入框中输入文本（重要：必须先调用 wait_for_visible 等待元素可见）",
+      "parameters": {
+        "selector": {
+          "type": "string",
+          "description": "CSS 选择器或 XPath",
+          "required": true,
+          "examples": ["#username", "input[name='email']", "//input[@placeholder='请输入密码']"]
+        },
+        "text": {
+          "type": "string",
+          "description": "要输入的文本内容",
+          "required": true
+        }
+      },
+      "examples": ["在搜索框输入 Hello World", "在用户名框输入 admin"]
     }
-  ]
+  ],
+  "best_practices": [
+    "在执行任何操作前，始终先调用 wait_for_visible 等待元素可见",
+    "每次任务完成后务必调用 stop 关闭浏览器",
+    "使用 snapshot 获取页面结构，帮助构建正确的选择器",
+    "截图失败时会返回错误信息，检查浏览器是否正常运行",
+    "建议在 Docker 环境中运行以获得更好的兼容性"
+  ],
+  "environment_variables": {
+    "CHROMIUM_PATH": "浏览器可执行文件路径（默认: /usr/bin/chromium-browser）",
+    "GEMINI_API_KEY": "Google Gemini API key，用于 AI 视觉分析功能",
+    "HEADLESS": "是否使用无头模式（true/false，默认 true）"
+  }
 }

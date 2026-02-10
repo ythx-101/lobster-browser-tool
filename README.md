@@ -1,92 +1,103 @@
 # 🦞 Lobster Browser Tool
 
-零配置浏览器控制工具，简单且强大。
+Zero-config browser control tool. Simple yet powerful.
 
-## 特性
+## Features
 
-- ✅ 零配置
-- ✅ 内置 Stealth 反检测
-- ✅ 持久登录支持
-- ✅ 纯本地运行
-- ✅ 轻量 CLI 工具
+- ✅ Zero configuration
+- ✅ Built-in Stealth anti-detection
+- ✅ Persistent login support
+- ✅ Runs completely local
+- ✅ Lightweight CLI tool
+- ✅ AI Vision Analysis (Gemini)
 
-## 安装
+## Installation
 
 ```bash
 npm install -g lobster-browser-tool
 ```
 
-### Setup 说明
+### Setup
 
-安装后会自动执行 `postinstall` 脚本来安装 Playwright Chromium 内核：
+After installation, run the setup script to install Playwright Chromium:
 
 ```bash
-# 自动安装（推荐）
+# Auto install (recommended)
 npm install -g lobster-browser-tool
 
-# 或手动运行 setup
+# Or run setup manually
 npx lobster-browser-tool setup
-# 或
+# or
 npm run setup
+# or
+./install.sh
 ```
 
-> **注意**：首次安装时，`postinstall` 会自动调用 `npx playwright install chromium`，确保浏览器内核可用。
+> **Note**: The `postinstall` script automatically calls `npx playwright install chromium` to ensure browser binaries are available.
 
-## 使用
+> If executable not found, run: `npm run setup`
+
+## Usage
 
 ```bash
-lobster-browser-tool <命令>
+lobster-browser-tool <command>
 ```
 
-### 命令列表
+### Commands
 
-| 命令 | 说明 |
-|------|------|
-| `start` | 启动浏览器 |
-| `stop` | 关闭浏览器 |
-| `navigate <url>` | 访问页面 |
-| `screenshot` | 截图 |
-| `snapshot` | 获取页面结构 |
-| `status` | 查看状态 |
-| `analyze "<提示词>"` | AI 识图分析 |
+| Command | Description |
+|---------|-------------|
+| `start` | Start browser |
+| `stop` | Close browser |
+| `navigate <url>` | Navigate to URL |
+| `screenshot` | Take screenshot |
+| `snapshot` | Get page structure |
+| `status` | View status |
+| `analyze "<prompt>"` | AI vision analysis |
+| `setup` | Install browser |
 
-## 示例
+## Examples
 
 ```bash
-# 启动浏览器
+# Start browser
 lobster-browser-tool start
 
-# 访问 Google
+# Navigate to Google
 lobster-browser-tool navigate https://google.com
 
-# 截图
+# Take screenshot
 lobster-browser-tool screenshot
 
-# AI 分析页面
-lobster-browser-tool analyze "这个页面是关于什么的？"
+# AI analyze page
+lobster-browser-tool analyze "What is this page about?"
+lobster-browser-tool analyze "Extract all prices"
+lobster-browser-tool analyze "What does this chart show?"
 ```
 
-## 依赖
+## Environment Variables
 
-首次安装会自动安装 Playwright。如果需要手动安装：
+```bash
+CHROMIUM_PATH  - Browser path (default: /usr/bin/chromium-browser)
+GEMINI_API_KEY - Google Gemini API key for AI vision analysis
+```
+
+## Dependencies
+
+Playwright is installed automatically. To install manually:
 
 ```bash
 npx playwright install chromium
 ```
 
-## 架构
+## Architecture
 
 ```
 browser-control.js
 ├── Playwright Chromium
-├── Stealth 补丁 (内置)
-├── 命令解析器
-└── 状态管理
+├── Stealth Patch (built-in)
+├── Command Parser
+└── State Management
 ```
-
-## 灵感来源
-
-看了 OpenClaw 项目后，自己领悟并生长的工具。
 
 ## License
 
