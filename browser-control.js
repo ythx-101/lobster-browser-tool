@@ -253,7 +253,8 @@ class BrowserControl {
 
       // 2. 调用 Gemini Vision
       console.log(`🤖 AI 分析中...`);
-      const cmd = `python3 /root/clawd/tools/gemini-vision.py "${screenshotPath}" "${prompt.replace(/"/g, '\\"')}"`;
+      const geminiVisionPath = process.env.GEMINI_VISION_PATH || path.join(__dirname, 'gemini-vision.py');
+      const cmd = `python3 "${geminiVisionPath}" "${screenshotPath}" "${prompt.replace(/"/g, '\\"')}"`;
       const result = execSync(cmd, { encoding: 'utf8', timeout: 60000 });
       
       console.log('✅ 分析完成');
