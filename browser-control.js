@@ -483,6 +483,9 @@ class BrowserControl {
 
 // CLI Entry Point
 async function main() {
+  // 版本检查
+  try { require("./version-check").checkForUpdate("ythx-101/lobster-browser-tool"); } catch(e) {}
+
   const args = process.argv.slice(2);
   const command = args[0] || 'status';
   const arg1 = args[1];
