@@ -1,6 +1,6 @@
 /**
  * 版本检查模块 - 启动时检查 GitHub 是否有新版本
- * 缓存结果（每天最多检查一次），失败静默
+ * 输出到 stderr，仅在交互终端显示，异步不阻塞
  */
 
 const https = require('https');
@@ -10,12 +10,13 @@ const os = require('os');
 
 function checkForUpdate(repo) {
   try {
-    // 读本地版本
+    // 非交互环境不显示
+    if (!process.stderr.isTTY) return;
+
     const pkg = require(path.join(__dirname, 'package.json'));
     const localVersion = pkg.version;
     if (!localVersion) return;
 
-    // 检查缓存
     const cacheDir = path.join(os.homedir(), '.cache', 'openclaw-updates');
     fs.mkdirSync(cacheDir, { recursive: true });
     const cacheFile = path.join(cacheDir, `${repo.replace('/', '_')}.json`);
@@ -33,7 +34,6 @@ function checkForUpdate(repo) {
       } catch (e) {}
     }
 
-    // 查 GitHub API（异步，不阻塞）
     const options = {
       hostname: 'api.github.com',
       path: `/repos/${repo}/releases/latest`,
@@ -48,28 +48,24 @@ function checkForUpdate(repo) {
         try {
           const json = JSON.parse(data);
           const remoteVersion = (json.tag_name || '').replace(/^v/, '');
-
           fs.writeFileSync(cacheFile, JSON.stringify({ checked_at: now, remote_version: remoteVersion }));
-
           if (remoteVersion && remoteVersion !== localVersion) {
             printUpdateNotice(localVersion, remoteVersion, repo);
           }
         } catch (e) {}
       });
     });
-
     req.on('error', () => {});
     req.on('timeout', () => req.destroy());
-
   } catch (e) {}
 }
 
 function printUpdateNotice(local, remote, repo) {
   const Y = '\x1b[33m', G = '\x1b[32m', B = '\x1b[1m', R = '\x1b[0m';
-  console.log(`\n${Y}${B}⚠ 新版本可用!${R}`);
-  console.log(`  当前: v${local}  →  最新: ${G}v${remote}${R}`);
-  console.log(`  运行 ${B}git pull${R} 更新`);
-  console.log(`  详情: https://github.com/${repo}/releases\n`);
+  process.stderr.write(`\n${Y}${B}⚠ 新版本可用!${R}\n`);
+  process.stderr.write(`  当前: v${local}  →  最新: ${G}v${remote}${R}\n`);
+  process.stderr.write(`  运行 ${B}git pull${R} 更新\n`);
+  process.stderr.write(`  详情: https://github.com/${repo}/releases\n\n`);
 }
 
 module.exports = { checkForUpdate };
